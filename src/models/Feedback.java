@@ -15,27 +15,28 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-@Table(name = "reports")
+@Table(name = "feedbacks")
 @NamedQueries({
     @NamedQuery(
-            name = "getAllReports",
-            query = "SELECT r FROM Report AS r ORDER BY r.id DESC"
+            name = "getAllFeedbacks",
+            query = "SELECT f FROM Feedback AS f ORDER BY f.id DESC"
             ),
     @NamedQuery(
-            name = "getReportsCount",
-            query = "SELECT COUNT(r) FROM Report AS r"
+            name = "getFeedbacksCount",
+            query = "SELECT COUNT(f) FROM Feedback AS f"
             ),
     @NamedQuery(
-            name = "getMyAllReports",
-            query = "SELECT r FROM Report AS r WHERE r.employee = :employee ORDER BY r.id DESC"
+            name = "getMyAllFeedbacks",
+            query = "SELECT f FROM Feedback AS f WHERE f.report = :report ORDER BY f.id DESC"
             ),
     @NamedQuery(
-            name = "getMyReportsCount",
-            query = "SELECT COUNT(r) FROM Report AS r WHERE r.employee = :employee"
+            name = "getMyFeedbacksCount",
+            query = "SELECT COUNT(f) FROM Feedback AS f WHERE f.report = :report"
             )
 })
 @Entity
-public class Report {
+public class Feedback {
+
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,11 +46,12 @@ public class Report {
     @JoinColumn(name = "employee_id", nullable = false)
     private Employee employee;
 
-    @Column(name = "report_date", nullable = false)
-    private Date report_date;
+    @ManyToOne
+    @JoinColumn(name = "report_id", nullable = false)
+    private Report report;
 
-    @Column(name = "title", length = 255, nullable = false)
-    private String  title;
+    @Column(name = "feedback_date", nullable = false)
+    private Date feedback_date;
 
     @Lob
     @Column(name = "content", nullable = false)
@@ -57,9 +59,6 @@ public class Report {
 
     @Column(name = "created_at", nullable = false)
     private Timestamp created_at;
-
-    @Column(name = "updated_at", nullable = false)
-    private Timestamp updated_at;
 
     public Integer getId() {
         return id;
@@ -77,20 +76,20 @@ public class Report {
         this.employee = employee;
     }
 
-    public Date getReport_date() {
-        return report_date;
+    public Date getFeedback_date() {
+        return feedback_date;
     }
 
-    public void setReport_date(Date report_date) {
-        this.report_date = report_date;
+    public void setFeedback_date(Date feedback_date) {
+        this.feedback_date = feedback_date;
     }
 
-    public String getTitle() {
-        return title;
+    public Report getReport() {
+        return report;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setReport(Report report) {
+        this.report = report;
     }
 
     public String getContent() {
@@ -107,14 +106,6 @@ public class Report {
 
     public void setCreated_at(Timestamp created_at) {
         this.created_at = created_at;
-    }
-
-    public Timestamp getUpdated_at() {
-        return updated_at;
-    }
-
-    public void setUpdated_at(Timestamp updated_at) {
-        this.updated_at = updated_at;
     }
 
 

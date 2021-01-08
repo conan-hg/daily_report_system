@@ -1,6 +1,7 @@
 package controllers.repots;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.servlet.RequestDispatcher;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import models.Feedback;
 import models.Report;
 import utils.DBUtil;
 
@@ -37,7 +39,29 @@ public class ReportsShowServlet extends HttpServlet {
 
         Report r = em.find(Report.class, Integer.parseInt(request.getParameter("id")));
 
+
+
+        int page;
+        try{
+            page = Integer.parseInt(request.getParameter("page"));
+        } catch(Exception e) {
+            page = 1;
+        }
+        List<Feedback> feedbacks = em.createNamedQuery("getMyAllFeedbacks", Feedback.class)
+                                   .setParameter("report",r)
+                                   .setFirstResult(15 * (page - 1))
+                                   .setMaxResults(15)
+                                   .getResultList();
+
+        long feedbacks_count = (long)em.createNamedQuery("getMyFeedbacksCount", Long.class)
+                                        .setParameter("report", r)
+                                        .getSingleResult();
+
         em.close();
+
+        request.setAttribute("feedbacks", feedbacks);
+        request.setAttribute("feedbacks_count", feedbacks_count);
+        request.setAttribute("page", page);
 
         request.setAttribute("report", r);
         request.setAttribute("_token", request.getSession().getId());
