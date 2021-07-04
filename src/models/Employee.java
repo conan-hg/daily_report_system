@@ -18,7 +18,7 @@ import javax.persistence.Table;
 			query = "select e from Employee as e order by e.id desc"
 	),
 	@NamedQuery(
-			name = "getAllEmployeesContent",
+			name = "getEmployeesCount",
 			query = "select count(e) from Employee as e"
 	),
 	@NamedQuery(
