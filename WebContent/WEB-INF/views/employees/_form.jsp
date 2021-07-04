@@ -17,7 +17,7 @@
 <input type="text" name="name" value="${employee.name}" />
 <br /><br />
 
-<label for="password">社員番号</label><br />
+<label for="password">パスワード</label><br />
 <input type="text" name="password" value="${employee.password}" />
 <br /><br />
 
