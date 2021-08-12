@@ -57,6 +57,11 @@ public class Loginfilter implements Filter {
 					((HttpServletResponse)response).sendRedirect(context_path + "/");
 					return;
 				}
+			} else {
+				if(e != null) {
+					((HttpServletResponse)response).sendRedirect(context_path + "/");
+					return;
+				}
 			}
 		}
 
